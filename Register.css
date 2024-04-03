@@ -1,0 +1,124 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    background : linear-gradient(45deg, rgb(116, 26, 241), rgb(245, 139, 0));
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+.box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+.container{
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 0 15px;
+}
+.input{
+    height: 45px;
+    width: 87%;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    color: #fff;
+    padding: 0 0 0 42px ;
+    background: rgba(255, 255, 255, 0.3);
+    
+}
+input:hover{
+    box-shadow: 1px 5px 10px 3px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+
+.inputField{
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+}
+i{
+    position: relative;
+    top: -32px;
+    left: 17px;
+    color: #fff;
+    width:10px
+}
+ ::-webkit-input-placeholder{
+    color:#fff;
+}
+.submit{
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    height: 45px;
+    outline: none;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.submit:hover{
+    box-shadow: 1px 5px 10px 3px rgba(0, 0, 0, 0.2);
+}
+img{
+    position: center;
+    float: top;
+    left: 350px;
+    width: 350px;
+    border-radius: 200px;
+    box-shadow: 1px 5px 10px 3px rgba(0, 0, 0, 0.2);
+}
+label{
+    color: #fff;
+    text-decoration: none;
+    float: right;
+}
+::placeholder{
+    color: #fff;
+}
+
+.uniqueDesign {
+    --color-complementary: #ff9e4b;
+    --color-accent: #4bcaff;
+}
+
+.uniqueDesign .input {
+    border: 2px dashed var(--color-complementary);
+}
+
+.uniqueDesign .input:focus {
+    border: 2px dashed var(--color-accent);
+}
+
+.uniqueDesign .container:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: calc(100% + 40px);
+    height: calc(100% + 40px);
+    background: linear-gradient(45deg, var(--color-accent), var(--color-complementary));
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(10px);
+}
+
+.uniqueDesign .submit {
+    background: var(--color-complementary);
+    color: var(--color-accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.uniqueDesign .submit:hover {
+    background: var(--color-accent);
+    color: var(--color-complementary);
+}

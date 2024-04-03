@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Author: Simon Flenman -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Register.css">   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>signUp</title>
+   
+    
+</head>
+<body>
+    <div class="box">
+        <div class="container">
+            <div class="topHeader">
+                <img src="/images/Marketplace.png" alt="">
+
+            </div>
+                <div class="inputField">
+                    
+                    <input type="text"class="input" id="fname" placeholder="First name" required>
+                    <i class="fa fa-user-plus" aria-hidden="true"></i>                
+                </div>
+
+
+                <div class="inputField">
+                    
+                    <input type="text" class="input" id="lname" placeholder="Last name" required>
+                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                </div>
+
+
+                <div class="inputField">
+                    
+                    <input type="email" class="input" id="email" placeholder="E-Mail" required>
+                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                </div>
+
+
+                <div class="inputField">
+                    
+                    <input type="password" class="input" id="passw" placeholder="Password" maxlength="16" minlength="6" required>
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <span id="password-error" style="color:red;"></span>
+                </div>
+
+                <div class="inputField"> <a href="signUp.html">
+                    <input type="reset" class="submit" value="Reset" >
+                </a>
+                </div>
+
+
+                <div class="inputField">
+                    <button type="button" class="submit " id="signUpButton" onclick="sendPostRequest()">Sign Up </button>
+                </div>
+
+        </div>
+    </div>
+    <script src=""></script>
+</body>
+</html>

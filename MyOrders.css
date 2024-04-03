@@ -1,0 +1,98 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Playfair Display', sans-serif;
+    
+}
+
+
+body {
+    background-color: #efefef;
+}
+img{
+    left: 200px;
+    width: 200px;
+    border-radius: 50px;
+    box-shadow: 1px 5px 10px 3px rgba(0, 0, 0, 0.2);
+    margin-top: -40px;
+    margin-left: 20px;
+}
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background : linear-gradient(45deg, rgb(116, 26, 241), rgb(245, 139, 0));
+    padding: 60px 2%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0px 0px 10px 0px rgba(89, 89, 89, 0.2);
+    
+}
+
+.navLeft{
+    display: flex;
+    align-items: tops;
+}
+
+.navRight{
+    display: flex;
+    align-items: center;
+}
+.navbarMenu{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.navbarItem{
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 3rem;
+    width: 100%;
+    margin-left: 50px;
+    
+}
+.navbarLinks{
+color: #f02dd2;
+box-shadow: 0px 0px 1000px 0px rgba(89, 89, 89, 0.2);
+font-size: larger;
+display: flex;
+align-items: center;
+justify-content: center;
+text-decoration: none;
+padding: 10px 20px;
+height: 100%;
+width: 100%;
+border: none;
+outline: none;
+border-radius: 20px;
+background:rgb(26, 0, 63)
+
+}
+.navbarLinks:hover{
+    box-shadow: 3px 8px 15px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.navUserIcon img{
+    width: 100px;
+    border-radius: 10%;
+    cursor: pointer;
+}
+.navUserIcon{
+    margin-left: 30px;
+    margin-top: -50px;
+}
+.container{
+    display: flex;
+    justify-content: space-between;
+    padding: 13px 5%;
+}
+ul{
+    size: 10px;
+}

@@ -1,0 +1,64 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    background : linear-gradient(45deg, rgb(116, 26, 241), rgb(245, 139, 0));
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+.box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+.container{
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 0 15px;
+}
+img{
+    position: center;
+    float: top;
+    left: 350px;
+    width: 350px;
+    border-radius: 200px;
+    box-shadow: 1px 5px 10px 3px rgba(0, 0, 0, 0.2);
+}
+.inputField{
+    display: flex;
+    flex-direction: column;
+}
+.submit{
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    height: 45px;
+    outline: none;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.submit:hover{
+    box-shadow: 1px 5px 10px 3px rgba(0, 0, 0, 0.2);
+}
+ ::-webkit-input-placeholder{
+    color:#fff;
+}
+.signUp{
+    padding-top: 10px;
+}
+.login{
+    padding-top: 10px;
+}
+p{
+    font-weight: bold;
+    font-size: 35px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 10px 10px 20px rgb(69, 63, 63);
+}
