@@ -1,5 +1,6 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.model.Role;
 import com.example.marketplace.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,7 @@ public class UserInfoDetails  implements UserDetails {
     public UserInfoDetails(User userInfo) {
         this.name = userInfo.getUsername();
         this.password = userInfo.getPassword();
-        this.authorities = Arrays.stream(userInfo.getRoles().split("")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        this.authorities = Collections.singletonList(new SimpleGrantedAuthority(userInfo.getRoles().name()));
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

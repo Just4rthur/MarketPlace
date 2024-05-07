@@ -1,8 +1,5 @@
 package com.example.marketplace.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,11 +20,10 @@ public class User {
     private String password;
     @Getter
     @Setter
-    private String roles;
+    private Role roles;
 
-    public User(String id, String username, String email, String password, String roles) {
+    public User(String username, String email, String password, Role roles) {
         super();
-        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;

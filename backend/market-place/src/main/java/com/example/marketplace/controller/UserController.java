@@ -1,15 +1,15 @@
 package com.example.marketplace.controller;
 
+import com.example.marketplace.dto.userCredentialDTO;
+import com.example.marketplace.model.Role;
+import com.example.marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.marketplace.model.AuthRequest;
 import com.example.marketplace.model.User;
@@ -17,9 +17,19 @@ import com.example.marketplace.service.JwtService;
 import com.example.marketplace.service.UserInfoService;
 import org.springframework.security.core.Authentication;
 
+import java.util.Optional;
+
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/auth")
 public class UserController {
+
+    private UserRepository userRepository;
+
+    public UserController(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
     @Autowired
     private UserInfoService userInfoService;
 
@@ -36,8 +46,15 @@ public class UserController {
     }
 
     @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody User user) {
-        return userInfoService.addUser(user);
+    public ResponseEntity<?> addNewUser(@RequestBody userCredentialDTO userDTO) {
+
+        Optional<User> userOptionalName = userRepository.findByUsername(userDTO.username());
+        Optional<User> userOptionalEmail = userRepository.findByEmail(userDTO.email());
+        if (userOptionalName.isEmpty() && userOptionalEmail.isEmpty()){
+            userRepository.save(new User(userDTO.username(), userDTO.email(), userDTO.password(), Role.ROLE_USER));
+            return ResponseEntity.ok().build();
+        }
+       return ResponseEntity.badRequest().body("this user name or email already exist");
     }
 
     @GetMapping("/user/userProfile")
