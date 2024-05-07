@@ -1,19 +1,17 @@
 package com.example.marketplace.repository;
 
-import com.example.marketplace.model.Product;
+import com.example.marketplace.model.Product2;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface ProductRepository extends MongoRepository<Product, String> {
+public interface ProductRepository extends MongoRepository<Product2, String> {
 
-    @Query("{ 'name' : '?0' }")
-    Product findByName(String name);
+    List<Product2> findByName(String name);
 
-    @Query("{ 'category' : '?0' }")
-    List<Product> findAll(String category);
+    List<Product2> findByCondition(String condition);
 
     public long count();
+    List<Product2> findByPriceBetween(double minPrice, double maxPrice);
 
 }

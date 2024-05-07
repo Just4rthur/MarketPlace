@@ -2,6 +2,7 @@ package com.example.marketplace.model;
 
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -10,6 +11,7 @@ public class Product {
     private String id;
 
     @Getter
+    @Setter
     private String name;
     private String description;
     private String category;

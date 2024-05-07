@@ -1,6 +1,5 @@
 package com.example.marketplace;
 
-import com.example.marketplace.model.Product;
 import com.example.marketplace.repository.ProductRepository;
 import com.example.marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-
-import java.util.List;
 
 @SpringBootApplication(exclude = {
 		DataSourceAutoConfiguration.class,
@@ -34,12 +30,10 @@ public class MarketPlaceApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("Hello world!");
-
-
 	}
 
 	//CREATE
-	void createProducts() {
+/*	void createProducts() {
 		System.out.println("Creating products");
 
 		productRepository.save(new Product("1", "Laptop", "Dell Laptop", "Electronics", 54.0, 10));
@@ -49,7 +43,7 @@ public class MarketPlaceApplication implements CommandLineRunner {
 		productRepository.save(new Product("5", "Shoe", "Nike Shoe", "Footwear", 25.0, 50));
 
 		System.out.println("Products created");
-	}
+	}*/
 
 	//READ
 	public void showAllProducts() {
@@ -61,12 +55,12 @@ public class MarketPlaceApplication implements CommandLineRunner {
 		System.out.println(productRepository.findByName(name));
 	}
 
-	public void showProductByCategory(String category) {
+	/*public void showProductByCategory(String category) {
 		System.out.println("Category to be searched --> " + category);
 		List<Product> list = productRepository.findAll(category);
 
 		list.forEach(product -> System.out.println("Name " + product.getName() + " Quantity : " + product.getQuantity()));
-	}
+	}*/
 
 	//DELETE
 	public void deleteProduct(String id){
