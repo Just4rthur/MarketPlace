@@ -1,8 +1,11 @@
 package com.example.marketplace.controller;
 
+import com.example.marketplace.dto.ProductIdDTO;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,4 +67,31 @@ public class ProductController {
         return productService.getProductsByCondition(condition);
     }
 
+    //Ändra product state till pending
+    @PutMapping("/submitProductOrder")
+    public ResponseEntity<String> submitProductOrder(@RequestBody List<ProductIdDTO> productsToSubmit) {
+        if (productService.changeStatesOfProductsToPending(productsToSubmit)) {
+            return ResponseEntity.ok("Order submitted");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
+        }
+    }
+
+    @PutMapping("/denyProductOffer")
+    public ResponseEntity<String> denyProductOffer(@RequestBody ProductIdDTO productIdDTO) {
+        if(productService.changeStateOfProductToAvailable(productIdDTO)) {
+            return ResponseEntity.ok("Offer canceled");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
+        }
+    }
+
+    @PutMapping("/acceptOffer")
+    public ResponseEntity<String> acceptOffer(@RequestBody ProductIdDTO productIdDTO) {
+        if(productService.changeStateOfProductToAccept(productIdDTO)) {
+            return ResponseEntity.ok("Offer accepted");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
+        }
+    }
 }

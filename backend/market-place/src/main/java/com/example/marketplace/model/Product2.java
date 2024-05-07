@@ -1,5 +1,7 @@
 package com.example.marketplace.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Product2 {
-    @Id
+    @JsonProperty("id")
     private String id;
 
     @Getter
@@ -26,15 +28,20 @@ public class Product2 {
     @Setter
     private String condition;
 
+    @Getter
+    @Setter
+    private ProductState state;
 
-    public Product2(String id, String name, double price, String yearOfProduction, Color color, String condition) {
+
+
+    public Product2(String name, double price, String yearOfProduction, Color color, String condition, ProductState state) {
         super();
-        this.id = id;
         this.name = name;
         this.price = price;
         this.yearOfProduction = yearOfProduction;
         this.color = color;
         this.condition = condition;
+        this.state = ProductState.AVAILABLE;
     }
 
 
