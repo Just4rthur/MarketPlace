@@ -4,6 +4,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+
 @Document
 public class User {
 
@@ -21,6 +23,12 @@ public class User {
     @Getter
     @Setter
     private Role roles;
+    @Getter
+    @Setter
+    private ArrayList<String> listOfInterests;
+    @Getter
+    @Setter
+    private ArrayList<String> notificationList;
 
     public User(String username, String email, String password, Role roles) {
         super();
@@ -28,6 +36,8 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        listOfInterests = new ArrayList<>();
+        notificationList = new ArrayList<>();
     }
 
 }

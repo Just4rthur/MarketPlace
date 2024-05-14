@@ -19,6 +19,8 @@ public class ProductService {
 
     // Lägger till en ny produkt
     public void addProduct(Product2 product) {
+        String oldName = product.getName();
+        product.setName(oldName.toLowerCase());
         productRepository.save(product);
     }
 
