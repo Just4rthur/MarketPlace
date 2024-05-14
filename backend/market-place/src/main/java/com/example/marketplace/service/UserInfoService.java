@@ -41,14 +41,28 @@ public class UserInfoService implements UserDetailsService{
     }
 
     public boolean registerInterestInProduct(InterestDTO interestDTO) {
-        System.out.println("Checkpoint 2");
         try {
-
             Optional<User> userToUpdate = userRepository.findByUsername(interestDTO.username());
             if(userToUpdate.isPresent()) {
                 User user = userToUpdate.get();
                 ArrayList<String> listOfInterests = user.getListOfInterests();
-                listOfInterests.add(interestDTO.productType());
+                listOfInterests.add(interestDTO.productType().toLowerCase());
+                user.setListOfInterests(listOfInterests);
+                userRepository.save(user);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deleteInterest(InterestDTO interestDTO) {
+        try {
+            Optional<User> userToUpdate = userRepository.findByUsername(interestDTO.username());
+            if(userToUpdate.isPresent()) {
+                User user = userToUpdate.get();
+                ArrayList<String> listOfInterests = user.getListOfInterests();
+                listOfInterests.remove(interestDTO.productType().toLowerCase());
                 user.setListOfInterests(listOfInterests);
                 userRepository.save(user);
             }
