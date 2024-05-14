@@ -1,6 +1,7 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.dto.InterestDTO;
+import com.example.marketplace.dto.UsernameDTO;
 import com.example.marketplace.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,9 +36,7 @@ public class InterestController {
     }
 
     @GetMapping("/getNotifications")
-    public ArrayList<String> getNotifications(@RequestParam String username) throws Exception {
-        return userInfoService.getNotifications(username);
+    public ArrayList<String> getNotifications(@RequestBody UsernameDTO usernameDTO) {
+        return userInfoService.getNotifications(usernameDTO.username());
     }
-
-
 }
