@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.marketplace.service.UserInfoService;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/interest")
 public class InterestController {
@@ -31,5 +33,11 @@ public class InterestController {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete interest");
     }
+
+    @GetMapping("/getNotifications")
+    public ArrayList<String> getNotifications(@RequestParam String username) throws Exception {
+        return userInfoService.getNotifications(username);
+    }
+
 
 }

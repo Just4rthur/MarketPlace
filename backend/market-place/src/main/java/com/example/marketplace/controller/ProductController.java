@@ -17,11 +17,14 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private UserInfoService userInfoService;
 
     // Lägga till en ny produkt
     @PostMapping("/addNewProduct")
     public String addProduct(@RequestBody Product2 product) {
         productService.addProduct(product);
+        userInfoService.addNotification(product);
         return "New product added successfully";
     }
 

@@ -71,4 +71,23 @@ public class UserInfoService implements UserDetailsService{
             return false;
         }
     }
+
+    public ArrayList<String> getNotifications(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        User user = optionalUser.get();
+        return user.getNotificationList();
+    }
+
+    public void addNotification(Product2 product) {
+        for (User user : userRepository.findAll()) {
+            ArrayList<String> listOfInterests = user.getListOfInterests();
+            for (String interest : listOfInterests) {
+                if(interest.equals(product.getName())) {
+                    ArrayList<String> notificationList = user.getNotificationList();
+                    notificationList.add(product.getName());
+                    userRepository.save(user);
+                }
+            }
+        }
+    }
 }

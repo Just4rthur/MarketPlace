@@ -26,6 +26,9 @@ public class User {
     @Getter
     @Setter
     private ArrayList<String> listOfInterests;
+    @Getter
+    @Setter
+    private ArrayList<String> notificationList;
 
     public User(String username, String email, String password, Role roles) {
         super();
@@ -34,6 +37,7 @@ public class User {
         this.password = password;
         this.roles = roles;
         listOfInterests = new ArrayList<>();
+        notificationList = new ArrayList<>();
     }
 
 }
