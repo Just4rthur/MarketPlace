@@ -1,9 +1,12 @@
 package com.example.marketplace.controller;
 
+import com.example.marketplace.dto.InterestDTO;
+import com.example.marketplace.dto.ProductDTO;
 import com.example.marketplace.dto.userCredentialDTO;
 import com.example.marketplace.model.Role;
 import com.example.marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -77,5 +80,15 @@ public class UserController {
         } else {
             throw new UsernameNotFoundException("Invalid User Request");
         }
+    }
+
+
+
+    public void notifyUserOfProduct(User user) {
+        // a user can be interested to receive
+        //messages whenever a MacBook Pro is added to be sold in the marketplace. If the
+        //user is not connected to the system when the product is added, he/she must get
+        //a message on her/his inbox once he/she is connected
+
     }
 }

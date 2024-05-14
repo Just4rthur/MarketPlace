@@ -1,5 +1,6 @@
 package com.example.marketplace.controller;
 
+import com.example.marketplace.dto.InterestDTO;
 import com.example.marketplace.dto.ProductIdDTO;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.service.ProductService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.marketplace.service.UserInfoService;
 
 import java.util.List;
 
@@ -94,4 +96,6 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
         }
     }
+
+
 }
