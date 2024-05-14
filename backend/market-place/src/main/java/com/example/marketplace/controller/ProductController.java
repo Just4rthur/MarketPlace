@@ -1,8 +1,10 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.dto.InterestDTO;
+import com.example.marketplace.dto.ProductDTO;
 import com.example.marketplace.dto.ProductIdDTO;
 import com.example.marketplace.model.Product2;
+import com.example.marketplace.model.ProductState;
 import com.example.marketplace.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.marketplace.service.UserInfoService;
 
+import javax.naming.Context;
 import java.util.List;
 
 @RestController
@@ -20,12 +23,19 @@ public class ProductController {
     @Autowired
     private UserInfoService userInfoService;
 
-    // Lägga till en ny produkt
+    // Add a new product to the database
     @PostMapping("/addNewProduct")
-    public String addProduct(@RequestBody Product2 product) {
+    public String addProduct(@RequestBody ProductDTO productdto) {
+
+        //Convert productdto to product
+        Product2 product = new Product2(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.owner(), ProductState.AVAILABLE);
+
+        //Add product to the database
         productService.addProduct(product);
+
+        //Notify users
         userInfoService.addNotification(product);
-        return "New product added successfully";
+        return new ResponseEntity<String>("Product added successfully", HttpStatus.OK).getBody();
     }
 
     // Hämta en produkt med ID

@@ -32,9 +32,14 @@ public class Product2 {
     @Setter
     private ProductState state;
 
+    @Getter
+    @Setter
+    private User owner;
 
 
-    public Product2(String name, double price, String yearOfProduction, Color color, String condition, ProductState state) {
+
+
+    public Product2(String name, double price, String yearOfProduction, Color color, String condition, String owner, ProductState state) {
         super();
         this.name = name;
         this.price = price;
