@@ -51,7 +51,7 @@ public class UserController {
         Optional<User> userOptionalName = userRepository.findByUsername(userDTO.username());
         Optional<User> userOptionalEmail = userRepository.findByEmail(userDTO.email());
         if (userOptionalName.isEmpty() && userOptionalEmail.isEmpty()){
-            userRepository.save(new User(userDTO.username(), userDTO.email(), userDTO.password(), Role.ROLE_USER));
+            userInfoService.addUser(new User(userDTO.username(), userDTO.email(), userDTO.password(), Role.ROLE_USER));
             return ResponseEntity.ok().build();
         }
        return ResponseEntity.badRequest().body("this user name or email already exist");
