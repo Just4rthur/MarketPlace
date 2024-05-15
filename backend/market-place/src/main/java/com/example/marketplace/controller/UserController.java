@@ -1,26 +1,27 @@
 package com.example.marketplace.controller;
 
-import com.example.marketplace.dto.InterestDTO;
-import com.example.marketplace.dto.ProductDTO;
-import com.example.marketplace.dto.userCredentialDTO;
-import com.example.marketplace.model.Role;
-import com.example.marketplace.repository.UserRepository;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.example.marketplace.model.AuthRequest;
+import com.example.marketplace.dto.userCredentialDTO;
+import com.example.marketplace.model.Role;
 import com.example.marketplace.model.User;
+import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.service.JwtService;
 import com.example.marketplace.service.UserInfoService;
-import org.springframework.security.core.Authentication;
-
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -29,7 +30,7 @@ public class UserController {
 
     private UserRepository userRepository;
 
-    public UserController(UserRepository userRepository){
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -38,7 +39,6 @@ public class UserController {
 
     @Autowired
     private JwtService jwtService;
-
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -53,36 +53,47 @@ public class UserController {
 
         Optional<User> userOptionalName = userRepository.findByUsername(userDTO.username());
         Optional<User> userOptionalEmail = userRepository.findByEmail(userDTO.email());
-        if (userOptionalName.isEmpty() && userOptionalEmail.isEmpty()){
+        if (userOptionalName.isEmpty() && userOptionalEmail.isEmpty()) {
             userInfoService.addUser(new User(userDTO.username(), userDTO.email(), userDTO.password(), Role.ROLE_USER));
             return ResponseEntity.ok().build();
         }
-       return ResponseEntity.badRequest().body("this user name or email already exist");
+        return ResponseEntity.badRequest().body("this user name or email already exist");
     }
 
     @GetMapping("/user/userProfile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String userProfile(){
+    public String userProfile() {
         return "Welcome to your profile";
     }
 
     @GetMapping("/admin/adminProfile")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String adminProfile(){
+    public String adminProfile() {
         return "Welcome to your Admin Profile";
     }
 
-    @PostMapping("/generateToken")
-    public String authenticationAndGetToken(@RequestBody AuthRequest authRequest){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        if (authentication.isAuthenticated()){
-            return jwtService.generateToken(authRequest.getUsername());
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody userCredentialDTO userDTO) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.email(), userDTO.password()));
+        if (authentication.isAuthenticated()) {
+            generateToken(userDTO);
+            return ResponseEntity.ok().build();
         } else {
             throw new UsernameNotFoundException("Invalid User Request");
         }
     }
 
+    public void generateToken(@RequestBody userCredentialDTO userCredentialDTO) {
+        if (userCredentialDTO.username() == null) {
+            throw new UsernameNotFoundException("Invalid User Request");
+        }
 
+        String userToken = jwtService.generateToken(userCredentialDTO.username());
+
+        //Logs the token generated
+        System.out.println(userCredentialDTO.username() + " --> token generated");
+        System.out.println("User token: \n" + userToken);
+    }
 
     public void notifyUserOfProduct(User user) {
         // a user can be interested to receive

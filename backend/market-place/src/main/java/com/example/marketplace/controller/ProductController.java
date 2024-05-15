@@ -1,6 +1,5 @@
 package com.example.marketplace.controller;
 
-import com.example.marketplace.dto.InterestDTO;
 import com.example.marketplace.dto.ProductDTO;
 import com.example.marketplace.dto.ProductIdDTO;
 import com.example.marketplace.model.Product2;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.marketplace.service.UserInfoService;
 
-import javax.naming.Context;
 import java.util.List;
 
 @RestController
