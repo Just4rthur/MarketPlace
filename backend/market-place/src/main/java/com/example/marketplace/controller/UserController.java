@@ -74,13 +74,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody userCredentialDTO userDTO) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.email(), userDTO.password()));
-        if (authentication.isAuthenticated()) {
-            generateToken(userDTO);
-            return ResponseEntity.ok().build();
-        } else {
-            throw new UsernameNotFoundException("Invalid User Request");
-        }
+        User user = userRepository.findByEmail(userDTO.email()).orElseThrow(() -> new UsernameNotFoundException("User not found --> " + userDTO.email()));
+
+        String token = jwtService.generateToken(user.getUsername());
+        System.out.println("Token: \n" + token);
+
+        return ResponseEntity.ok(token);
     }
 
     public void generateToken(@RequestBody userCredentialDTO userCredentialDTO) {
