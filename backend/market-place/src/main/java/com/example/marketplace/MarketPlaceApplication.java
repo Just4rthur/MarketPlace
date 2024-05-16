@@ -2,6 +2,7 @@ package com.example.marketplace;
 
 import com.example.marketplace.repository.ProductRepository;
 import com.example.marketplace.repository.UserRepository;
+import com.example.marketplace.service.DatabaseUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +23,8 @@ public class MarketPlaceApplication implements CommandLineRunner {
 	ProductRepository productRepository;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	DatabaseUpdateService databaseUpdateService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MarketPlaceApplication.class, args);
@@ -29,6 +32,7 @@ public class MarketPlaceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
 		System.out.println("Hello world!");
 	}
 

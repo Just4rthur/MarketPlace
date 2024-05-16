@@ -40,7 +40,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/welcome", "/auth/addNewUser", "auth/generateToken",
-                 "/product/search/*", "/product/update/*", "/product/delete/*", "/interest/*", "/auth/login").permitAll())
+                 "/product/search/*", "/product/update/*", "/product/delete/*", "/interest/*", "/auth/login", "/product/listAll").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/user/**").authenticated())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("auth/admin/**").authenticated())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/product/addNewProduct").authenticated())
