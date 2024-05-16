@@ -14,6 +14,7 @@ import com.example.marketplace.service.UserInfoService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/product")
 public class ProductController {
     @Autowired
@@ -22,6 +23,7 @@ public class ProductController {
     private UserInfoService userInfoService;
 
     // Add a new product to the database
+
     @PostMapping("/addNewProduct")
     public String addProduct(@RequestBody ProductDTO productdto) {
 
