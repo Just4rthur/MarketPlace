@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,9 @@ public class UserController {
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -75,11 +79,14 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody userCredentialDTO userDTO) {
         User user = userRepository.findByEmail(userDTO.email()).orElseThrow(() -> new UsernameNotFoundException("User not found --> " + userDTO.email()));
+        if (passwordEncoder.matches(userDTO.password(), user.getPassword())) {
+            String token = jwtService.generateToken(user.getUsername());
+            System.out.println("Token: \n" + token);
 
-        String token = jwtService.generateToken(user.getUsername());
-        System.out.println("Token: \n" + token);
+            return ResponseEntity.ok(token);
+        }
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.status(403).body("Invalid username or password");
     }
 
     public void generateToken(@RequestBody userCredentialDTO userCredentialDTO) {

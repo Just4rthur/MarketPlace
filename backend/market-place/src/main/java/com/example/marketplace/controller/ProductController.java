@@ -14,6 +14,7 @@ import com.example.marketplace.service.UserInfoService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/product")
 public class ProductController {
     @Autowired
