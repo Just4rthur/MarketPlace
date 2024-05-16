@@ -107,5 +107,6 @@ public class UserController {
         //user is not connected to the system when the product is added, he/she must get
         //a message on her/his inbox once he/she is connected
 
+
     }
 }

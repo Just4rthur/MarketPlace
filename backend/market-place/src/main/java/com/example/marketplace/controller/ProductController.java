@@ -27,7 +27,7 @@ public class ProductController {
     public String addProduct(@RequestBody ProductDTO productdto) {
 
         //Convert productdto to product
-        Product2 product = new Product2(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.seller(), null, ProductState.AVAILABLE);
+        Product2 product = new Product2(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.seller(), null, ProductState.AVAILABLE);
 
         //Add product to the database
         productService.addProduct(product);
