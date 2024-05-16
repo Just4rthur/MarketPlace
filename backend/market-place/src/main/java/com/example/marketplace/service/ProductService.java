@@ -1,13 +1,17 @@
 package com.example.marketplace.service;
 
-import com.example.marketplace.dto.ProductDTO;
-import com.example.marketplace.dto.ProductIdDTO;
+import com.example.marketplace.dto.*;
+import com.example.marketplace.model.Product;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.ProductState;
+import com.example.marketplace.model.User;
 import com.example.marketplace.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.marketplace.repository.UserRepository;
+import java.util.NoSuchElementException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +20,8 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // Lägger till en ny produkt
     public void addProduct(Product2 product) {
@@ -24,26 +30,37 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    // Hämtar en produkt med på ID
-    public Product2 getProductById(String id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+    // Hämtar en produkt med på Product Name
+    public Optional<Product2> getProductByName(ProductNameDTO dto) {
+        return productRepository.findByName(dto.ProductName());
     }
 
     // Uppdaterar en befintlig produkt
-    public void updateProduct(String id, Product2 updatedProduct) {
-        Product2 product = getProductById(id);
-        product.setName(updatedProduct.getName());
-        product.setPrice(updatedProduct.getPrice());
-        product.setYearOfProduction(updatedProduct.getYearOfProduction());
-        product.setColor(updatedProduct.getColor());
-        product.setCondition(updatedProduct.getCondition());
-        productRepository.save(product);
+    public boolean updateProduct(SearchProductDTO searchProductDTO) {
+        Optional<Product2> optionalProduct = productRepository.findByName(searchProductDTO.userName());
+
+        if (optionalProduct.isPresent()) {
+            Product2 product = optionalProduct.get();
+            product.setName(searchProductDTO.productName());
+            product.setPrice(searchProductDTO.price());
+            product.setYearOfProduction(searchProductDTO.yearOfProduction());
+            product.setColor(searchProductDTO.color());
+            product.setCondition(searchProductDTO.condition());
+            productRepository.save(product);
+            return true;
+        } else {
+            return false; // product not found
+        }
     }
 
     // Tar bort en produkt
-    public void deleteProduct(String id) {
-        productRepository.deleteById(id);
+    public boolean deleteProduct(ProductNameDTO dto) {
+        Optional<Product2> product = productRepository.findByName(dto.ProductName());
+        if (product.isPresent()) {
+            productRepository.delete(product.get());
+            return true;
+        }
+        return false;
     }
 
     // Hämta alla produkter
@@ -52,12 +69,16 @@ public class ProductService {
     }
 
    // Hämta produkter inom ett specifikt prisintervall
-    public List<Product2> getProductsByPriceRange(double minPrice, double maxPrice) {
-        return productRepository.findByPriceBetween(minPrice, maxPrice);
+   public List<Product2> getProductsByPriceRange(PriceRangeDTO priceRangeDTO) {
+       return productRepository.findByPriceBetween(priceRangeDTO.minPrice(), priceRangeDTO.maxPrice());
+   }
+   // Hämta produkter baserat på skick
+    public List<Product2> getProductsByCondition(ConditionDTO conditionDTO) {
+        return productRepository.findByCondition(conditionDTO.condition());
     }
 
     // Hämta produkter baserat på namn
-    public List<Product2> getProductsByName(String name) {
+    public Optional<Product2> getProductsByName(String name) {
         return productRepository.findByName(name);
     }
 

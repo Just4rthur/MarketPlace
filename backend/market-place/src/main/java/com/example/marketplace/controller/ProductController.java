@@ -1,8 +1,6 @@
 package com.example.marketplace.controller;
 
-import com.example.marketplace.dto.InterestDTO;
-import com.example.marketplace.dto.ProductDTO;
-import com.example.marketplace.dto.ProductIdDTO;
+import com.example.marketplace.dto.*;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.ProductState;
 import com.example.marketplace.service.ProductService;
@@ -38,26 +36,33 @@ public class ProductController {
         return new ResponseEntity<String>("Product added successfully", HttpStatus.OK).getBody();
     }
 
-    // Hämta en produkt med ID
-    @GetMapping("/{id}")
-    public Product2 getProductById(@PathVariable String id) {
-        return productService.getProductById(id);
+    // Hämta en produkt med Namn
+    @GetMapping("/getProduct")
+    public ResponseEntity<Product2> getProductByName(@RequestBody ProductNameDTO dto) {
+        return productService.getProductByName(dto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Uppdatera en befintlig produkt
-    @PutMapping("/update/{id}")
-    public String updateProduct(@PathVariable String id, @RequestBody Product2 product) {
-        productService.updateProduct(id, product);
-        return "Product updated successfully";
+    @PutMapping("/updateProduct")
+    public ResponseEntity<String> updateProduct(@RequestBody SearchProductDTO searchProductDTO) {
+        try {
+            productService.updateProduct(searchProductDTO);
+            return ResponseEntity.ok("Product updated successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-
     // Ta bort en produkt
-    @DeleteMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable String id) {
-        productService.deleteProduct(id);
-        return "Product deleted successfully";
+    @DeleteMapping("/deleteProduct")
+    public ResponseEntity<String> deleteProduct(@RequestBody ProductNameDTO dto) {
+        if (productService.deleteProduct(dto)) {
+            return ResponseEntity.ok("Product deleted successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-
     // Lista alla produkter
     @GetMapping("/listAll")
     public List<Product2> getAllProducts() {
@@ -66,20 +71,24 @@ public class ProductController {
 
     // Lista produkter inom ett specifikt prisintervall
     @GetMapping("/search/byPriceRange")
-    public List<Product2> getProductsByPriceRange(@RequestParam double minPrice, @RequestParam double maxPrice) {
-        return productService.getProductsByPriceRange(minPrice, maxPrice);
-    }
-
-    // Lista produkter baserat på namn
-    @GetMapping("/search/byName")
-    public List<Product2> getProductsByName(@RequestParam String name) {
-        return productService.getProductsByName(name);
+    public ResponseEntity<List<Product2>> getProductsByPriceRange(@RequestBody PriceRangeDTO priceRangeDTO) {
+        List<Product2> products = productService.getProductsByPriceRange(priceRangeDTO);
+        if (!products.isEmpty()) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Lista produkter baserat på skick
     @GetMapping("/search/byCondition")
-    public List<Product2> getProductsByCondition(@RequestParam String condition) {
-        return productService.getProductsByCondition(condition);
+    public ResponseEntity<List<Product2>> getProductsByCondition(@RequestBody ConditionDTO conditionDTO) {
+        List<Product2> products = productService.getProductsByCondition(conditionDTO);
+        if (!products.isEmpty()) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     //Ändra product state till pending
