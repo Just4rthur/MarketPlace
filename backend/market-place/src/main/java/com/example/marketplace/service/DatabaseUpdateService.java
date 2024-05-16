@@ -1,5 +1,6 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.model.Category;
 import com.example.marketplace.model.Product2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,7 +26,7 @@ public class DatabaseUpdateService {
             //Add new fields
             product.setSeller(null);
             product.setBuyer(null);
-            product.setCategory(null);
+            product.setCategory(Category.ELECTRONIC);
 
             mongoTemplate.save(product);
         }

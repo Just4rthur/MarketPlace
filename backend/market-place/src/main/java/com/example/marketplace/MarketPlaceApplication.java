@@ -33,6 +33,7 @@ public class MarketPlaceApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
+		//databaseUpdateService.updateProducts();
 		System.out.println("Hello world!");
 	}
 
