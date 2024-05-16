@@ -34,18 +34,22 @@ public class Product2 {
 
     @Getter
     @Setter
-    private User owner;
+    private User seller;
+
+    @Getter
+    @Setter
+    private User buyer;
 
 
 
-
-    public Product2(String name, double price, String yearOfProduction, Color color, String condition, String owner, ProductState state) {
+    public Product2(String name, double price, String yearOfProduction, Color color, String condition, User seller, User buyer, ProductState state) {
         super();
         this.name = name;
         this.price = price;
         this.yearOfProduction = yearOfProduction;
         this.color = color;
         this.condition = condition;
+        this.seller = seller;
         this.state = ProductState.AVAILABLE;
     }
 
