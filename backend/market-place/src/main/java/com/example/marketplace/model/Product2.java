@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Document
 public class Product2 {
     @JsonProperty("id")
@@ -47,10 +49,13 @@ public class Product2 {
     @Getter
     @Setter
     private User buyer;
+    @Getter
+    @Setter
+    private LocalDateTime timeWhenBought;
 
 
 
-    public Product2(String name, double price, String yearOfProduction, Color color, String condition, Category category, User seller, User buyer, ProductState state) {
+    public Product2(String name, double price, String yearOfProduction, Color color, String condition, Category category, User seller) {
         super();
         this.name = name;
         this.price = price;
@@ -60,6 +65,8 @@ public class Product2 {
         this.category = category;
         this.seller = seller;
         this.state = ProductState.AVAILABLE;
+        this.buyer = null;
+        this.timeWhenBought = null;
     }
 
 

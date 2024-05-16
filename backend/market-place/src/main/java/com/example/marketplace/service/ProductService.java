@@ -9,6 +9,8 @@ import com.example.marketplace.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.marketplace.repository.UserRepository;
+
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import java.util.ArrayList;
@@ -118,12 +120,22 @@ public class ProductService {
             Optional<Product2> productOpt = productRepository.findById(productIdDTO.id());
             Product2 product = productOpt.get();
             product.setState(ProductState.PURCHASE_CONFIRMED);
+            product.setTimeWhenBought(LocalDateTime.now());
             productRepository.save(product);
-
             return true;
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public List<Product2> getBoughtProducts() {
+        ArrayList<Product2> boughtProducts = new ArrayList<>();
+        for (Product2 boughtProduct : productRepository.findAll()) {
+            if(boughtProduct.getState() == ProductState.PURCHASE_CONFIRMED) {
+                boughtProducts.add(boughtProduct);
+            }
+        }
+        return boughtProducts;
     }
 }
 
