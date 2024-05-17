@@ -126,4 +126,9 @@ public class ProductController {
         return productService.getBoughtProducts();
     }
 
+    @GetMapping("/getOffers")
+    public List<Product2> getOffers(@RequestBody UsernameDTO usernameDTO) {
+        return productService.getOffers(usernameDTO);
+    }
+
 }

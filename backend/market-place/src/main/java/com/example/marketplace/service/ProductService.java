@@ -137,5 +137,15 @@ public class ProductService {
         }
         return boughtProducts;
     }
+
+    public List<Product2> getOffers(UsernameDTO usernameDTO) {
+        ArrayList<Product2> offers = new ArrayList<>();
+        for (Product2 offer : productRepository.findAll()) {
+            if(offer.getSeller().getUsername().equals(usernameDTO.username())) {
+                offers.add(offer);
+            }
+        }
+        return offers;
+    }
 }
 
