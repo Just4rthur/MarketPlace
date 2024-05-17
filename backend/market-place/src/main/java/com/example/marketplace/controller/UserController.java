@@ -2,20 +2,19 @@ package com.example.marketplace.controller;
 
 import java.util.Optional;
 
+import com.example.marketplace.dto.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.marketplace.dto.userCredentialDTO;
 import com.example.marketplace.model.Role;
@@ -99,6 +98,34 @@ public class UserController {
         //Logs the token generated
         System.out.println(userCredentialDTO.username() + " --> token generated");
         System.out.println("User token: \n" + userToken);
+    }
+
+    @PutMapping("/subscribeToCategory")
+    public ResponseEntity<String> subscribeToCategory(CategoryDTO categoryDTO){
+        //Check token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        String username = "";
+
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            username = userDetails.getUsername();
+        }
+
+        //Get user from the database
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (userInfoService.subscribeToCategory(user, categoryDTO)){
+
+            userRepository.save(user);
+            return new ResponseEntity<String>("User subscribed to category successfully", HttpStatus.OK);
+
+        }
+
+        return new ResponseEntity<>("User already subscribed to this category", HttpStatus.BAD_REQUEST);
     }
 
     public void notifyUserOfProduct(User user) {

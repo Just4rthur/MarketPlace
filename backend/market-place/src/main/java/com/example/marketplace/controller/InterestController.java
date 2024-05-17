@@ -19,9 +19,6 @@ public class InterestController {
 
     @PutMapping("/registerInterest")
     public ResponseEntity<String> registerInterestInProduct(@RequestBody InterestDTO interestDTO) {
-        if(userInfoService.registerInterestInProduct(interestDTO)) {
-            return ResponseEntity.ok("Interest added");
-        }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register interest");
     }

@@ -1,12 +1,15 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.dto.CategoryDTO;
 import com.example.marketplace.dto.InterestDTO;
 import com.example.marketplace.dto.ProductDTO;
 import com.example.marketplace.dto.userCredentialDTO;
+import com.example.marketplace.model.Category;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.User;
 import com.example.marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,36 +43,21 @@ public class UserInfoService implements UserDetailsService{
         return "User added successfully";
     }
 
-    public boolean registerInterestInProduct(InterestDTO interestDTO) {
-        try {
-            Optional<User> userToUpdate = userRepository.findByUsername(interestDTO.username());
-            if(userToUpdate.isPresent()) {
-                User user = userToUpdate.get();
-                ArrayList<String> listOfInterests = user.getListOfInterests();
-                listOfInterests.add(interestDTO.productType().toLowerCase());
-                user.setListOfInterests(listOfInterests);
-                userRepository.save(user);
-            }
-            return true;
-        } catch (Exception e) {
+    public boolean subscribeToCategory(User user, CategoryDTO categoryDTO) {
+
+        if (user.getListOfInterests().contains(categoryDTO.category())) {
+            System.out.println("User already subscribed to this category");
             return false;
         }
+
+        user.getListOfInterests().add(categoryDTO.category());
+        System.out.println("User subscribed to category: " + categoryDTO.category());
+
+        return true;
     }
 
     public boolean deleteInterest(InterestDTO interestDTO) {
-        try {
-            Optional<User> userToUpdate = userRepository.findByUsername(interestDTO.username());
-            if(userToUpdate.isPresent()) {
-                User user = userToUpdate.get();
-                ArrayList<String> listOfInterests = user.getListOfInterests();
-                listOfInterests.remove(interestDTO.productType().toLowerCase());
-                user.setListOfInterests(listOfInterests);
-                userRepository.save(user);
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return false;
     }
 
     public ArrayList<String> getNotifications(String username) {
@@ -79,15 +67,6 @@ public class UserInfoService implements UserDetailsService{
     }
 
     public void addNotification(Product2 product) {
-        for (User user : userRepository.findAll()) {
-            ArrayList<String> listOfInterests = user.getListOfInterests();
-            for (String interest : listOfInterests) {
-                if(interest.equals(product.getName())) {
-                    ArrayList<String> notificationList = user.getNotificationList();
-                    notificationList.add(product.getName());
-                    userRepository.save(user);
-                }
-            }
-        }
+
     }
 }

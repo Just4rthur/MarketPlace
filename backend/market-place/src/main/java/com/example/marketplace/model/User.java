@@ -25,7 +25,7 @@ public class User {
     private Role roles;
     @Getter
     @Setter
-    private ArrayList<String> listOfInterests;
+    private ArrayList<Category> listOfInterests;
     @Getter
     @Setter
     private ArrayList<String> notificationList;
