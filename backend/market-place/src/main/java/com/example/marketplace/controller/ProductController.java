@@ -104,6 +104,24 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/availableProducts")
+    public List<Product2> getAvailableProductsForUser() {
+        String username = "";
+        //token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            username = userDetails.getUsername();
+        }
+
+        return productService.getAvailableProductsForUser(username);
+    }
+
     // Lista produkter inom ett specifikt prisintervall
     @GetMapping("/search/byPriceRange")
     public ResponseEntity<List<Product2>> getProductsByPriceRange(@RequestBody PriceRangeDTO priceRangeDTO) {

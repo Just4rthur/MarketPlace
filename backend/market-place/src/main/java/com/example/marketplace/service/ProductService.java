@@ -113,6 +113,17 @@ public class ProductService {
         }
     }
 
+    public List<Product2> getAvailableProductsForUser(String username) {
+        List<Product2> products = productRepository.findBySeller(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+        List<Product2> availableProducts = new ArrayList<>();
+        for (Product2 product : products) {
+            if (product.getState() == ProductState.AVAILABLE) {
+                availableProducts.add(product);
+            }
+        }
+        return availableProducts;
+    }
+
     public boolean changeStateOfProductToAvailable(ProductIdDTO productIdDTO) {
         return false;
     }
