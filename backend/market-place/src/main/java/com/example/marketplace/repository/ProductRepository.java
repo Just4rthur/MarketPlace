@@ -2,6 +2,7 @@ package com.example.marketplace.repository;
 
 import com.example.marketplace.model.Product;
 import com.example.marketplace.model.Product2;
+import com.example.marketplace.model.ProductState;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface ProductRepository extends MongoRepository<Product2, String> {
 
     public long count();
     List<Product2> findByPriceBetween(double minPrice, double maxPrice);
+
+    List<Product2> findByState(ProductState state);
 
 }

@@ -115,13 +115,26 @@ public class ProductController {
 
     //Ändra product state till pending
     @PutMapping("/submitProductOrder")
-    public ResponseEntity<String> submitProductOrder(@RequestBody List<ProductIdDTO> productsToSubmit) {
-        if (productService.changeStatesOfProductsToPending(productsToSubmit)) {
+    public ResponseEntity<String> submitProductOrder(@RequestBody ProductIdDTO productsToSubmit) {
+        //token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
 
-            return ResponseEntity.ok("Order submitted");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            String username = userDetails.getUsername();
+
+            if (productService.changeStatesOfProductsToPending(productsToSubmit, username)) {
+
+                return ResponseEntity.ok("Order submitted");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
+            }
         }
+        return null;
     }
 
     @PutMapping("/denyProductOffer")

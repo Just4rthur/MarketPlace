@@ -1,4 +1,6 @@
 package com.example.marketplace.dto;
 
-public record ProductIdDTO(String id) {
+import java.util.List;
+
+public record ProductIdDTO(String[] id) {
 }

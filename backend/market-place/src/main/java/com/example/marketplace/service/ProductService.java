@@ -70,7 +70,7 @@ public class ProductService {
 
     // Hämta alla produkter
     public List<Product2> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findByState(ProductState.AVAILABLE);
     }
 
     // Hämta produkter inom ett specifikt prisintervall
@@ -93,16 +93,14 @@ public class ProductService {
         return productRepository.findByCondition(condition);
     }
 
-    public boolean changeStatesOfProductsToPending(List<ProductIdDTO> productIds) {
+    public boolean changeStatesOfProductsToPending(ProductIdDTO productIds, String username) {
         try {
-            for (ProductIdDTO id : productIds) {
-                Optional<Product2> productOpt = productRepository.findById(id.id());
+            for (String id : productIds.id()) {
+                Optional<Product2> productOpt = productRepository.findById(id);
                 Product2 product = productOpt.get();
                 product.setState(ProductState.PENDING);
 
-                for (ProductIdDTO productIdDTO : productIds) {
-                    setBuyer(productIdDTO);
-                }
+                product.setBuyer(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
 
                 productRepository.save(product);
             }
@@ -113,45 +111,10 @@ public class ProductService {
     }
 
     public boolean changeStateOfProductToAvailable(ProductIdDTO productIdDTO) {
-        try {
-            Optional<Product2> productOpt = productRepository.findById(productIdDTO.id());
-            Product2 product = productOpt.get();
-            product.setState(ProductState.AVAILABLE);
-            productRepository.save(product);
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return false;
     }
 
     public boolean changeStateOfProductToAccept(ProductIdDTO productIdDTO) {
-        try {
-            Optional<Product2> productOpt = productRepository.findById(productIdDTO.id());
-            Product2 product = productOpt.get();
-            product.setState(ProductState.PURCHASE_CONFIRMED);
-            productRepository.save(product);
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public void setBuyer(ProductIdDTO product) {
-        Optional<Product2> productOpt = productRepository.findById(product.id());
-        Product2 product2 = productOpt.get();
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        //Check if the principal is a UserDetails object
-        if (principal instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) principal;
-
-            //Get the username from the UserDetails object
-            String username = userDetails.getUsername();
-            product2.setBuyer(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
-        }
+        return false;
     }
 }
