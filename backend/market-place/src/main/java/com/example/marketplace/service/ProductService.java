@@ -59,12 +59,15 @@ public class ProductService {
     }
 
     // Tar bort en produkt
-    public boolean deleteProduct(ProductNameDTO dto) {
-        Optional<Product2> product = productRepository.findByName(dto.ProductName());
-        if (product.isPresent()) {
-            productRepository.delete(product.get());
+    public boolean deleteProduct(ProductNameDTO dto, String username) {
+        Product2 product = productRepository.findByName(dto.ProductName()).orElseThrow(() -> new NoSuchElementException("Product not found"));
+
+        if (product.getSeller() == userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"))) {
+            productRepository.delete(product);
             return true;
         }
+
+        System.out.println("User not authorized to delete product");
         return false;
     }
 

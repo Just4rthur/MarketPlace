@@ -79,7 +79,20 @@ public class ProductController {
     // Ta bort en produkt
     @DeleteMapping("/deleteProduct")
     public ResponseEntity<String> deleteProduct(@RequestBody ProductNameDTO dto) {
-        if (productService.deleteProduct(dto)) {
+        //token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        String username = "";
+
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            username = userDetails.getUsername();
+        }
+
+        if (productService.deleteProduct(dto, username)) {
             return ResponseEntity.ok("Product deleted successfully");
         } else {
             return ResponseEntity.notFound().build();

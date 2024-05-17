@@ -1,5 +1,7 @@
 package com.example.marketplace;
 
+import com.example.marketplace.model.Product2;
+import com.example.marketplace.model.ProductState;
 import com.example.marketplace.repository.ProductRepository;
 import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.service.DatabaseUpdateService;
@@ -10,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import java.util.List;
 
 @SpringBootApplication(exclude = {
 		DataSourceAutoConfiguration.class,
@@ -35,6 +39,15 @@ public class MarketPlaceApplication implements CommandLineRunner {
 
 		//databaseUpdateService.updateProducts();
 		System.out.println("Hello world!");
+
+		/*
+		//set all products states to available
+		List<Product2> products = productRepository.findAll();
+		for (Product2 product : products) {
+			product.setBuyer(null);
+			productRepository.save(product);
+		}
+		 */
 	}
 
 	//CREATE
