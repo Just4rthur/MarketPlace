@@ -7,8 +7,13 @@ import com.example.marketplace.model.ProductState;
 import com.example.marketplace.model.User;
 import com.example.marketplace.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.marketplace.repository.UserRepository;
+
 import java.util.NoSuchElementException;
 
 import java.util.ArrayList;
@@ -68,11 +73,12 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-   // Hämta produkter inom ett specifikt prisintervall
-   public List<Product2> getProductsByPriceRange(PriceRangeDTO priceRangeDTO) {
-       return productRepository.findByPriceBetween(priceRangeDTO.minPrice(), priceRangeDTO.maxPrice());
-   }
-   // Hämta produkter baserat på skick
+    // Hämta produkter inom ett specifikt prisintervall
+    public List<Product2> getProductsByPriceRange(PriceRangeDTO priceRangeDTO) {
+        return productRepository.findByPriceBetween(priceRangeDTO.minPrice(), priceRangeDTO.maxPrice());
+    }
+
+    // Hämta produkter baserat på skick
     public List<Product2> getProductsByCondition(ConditionDTO conditionDTO) {
         return productRepository.findByCondition(conditionDTO.condition());
     }
@@ -86,12 +92,18 @@ public class ProductService {
     public List<Product2> getProductsByCondition(String condition) {
         return productRepository.findByCondition(condition);
     }
-    public boolean changeStatesOfProductsToPending(List<ProductIdDTO> productIds){
+
+    public boolean changeStatesOfProductsToPending(List<ProductIdDTO> productIds) {
         try {
             for (ProductIdDTO id : productIds) {
                 Optional<Product2> productOpt = productRepository.findById(id.id());
                 Product2 product = productOpt.get();
                 product.setState(ProductState.PENDING);
+
+                for (ProductIdDTO productIdDTO : productIds) {
+                    setBuyer(productIdDTO);
+                }
+
                 productRepository.save(product);
             }
             return true;
@@ -125,5 +137,21 @@ public class ProductService {
             return false;
         }
     }
-}
 
+    public void setBuyer(ProductIdDTO product) {
+        Optional<Product2> productOpt = productRepository.findById(product.id());
+        Product2 product2 = productOpt.get();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            String username = userDetails.getUsername();
+            product2.setBuyer(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+        }
+    }
+}
