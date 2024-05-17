@@ -88,12 +88,15 @@ public class ProductService {
     public List<Product2> getProductsByCondition(String condition) {
         return productRepository.findByCondition(condition);
     }
-    public boolean changeStatesOfProductsToPending(List<ProductIdDTO> productIds){
+    public boolean changeStatesOfProductsToPending(List<ProductIdDTO> productIds, String username){
         try {
             for (ProductIdDTO id : productIds) {
+                Optional<User> userOpt = userRepository.findByUsername(username);
+                User user = userOpt.get();
                 Optional<Product2> productOpt = productRepository.findById(id.id());
                 Product2 product = productOpt.get();
                 product.setState(ProductState.PENDING);
+                product.setBuyer(user);
                 productRepository.save(product);
             }
             return true;
@@ -107,8 +110,8 @@ public class ProductService {
             Optional<Product2> productOpt = productRepository.findById(productIdDTO.id());
             Product2 product = productOpt.get();
             product.setState(ProductState.AVAILABLE);
+            product.setBuyer(null);
             productRepository.save(product);
-
             return true;
         } catch (Exception e) {
             return false;
@@ -138,10 +141,30 @@ public class ProductService {
         return boughtProducts;
     }
 
-    public List<Product2> getOffers(UsernameDTO usernameDTO) {
+    public List<Product2> getOffers(String username) {
         ArrayList<Product2> offers = new ArrayList<>();
         for (Product2 offer : productRepository.findAll()) {
-            if(offer.getSeller().getUsername().equals(usernameDTO.username())) {
+            if(offer.getSeller().getUsername().equals(username) && offer.getState() == ProductState.PENDING) {
+                offers.add(offer);
+            }
+        }
+        return offers;
+    }
+
+    public List<Product2> getMyListings(String username) {
+        ArrayList<Product2> listings = new ArrayList<>();
+        for (Product2 listing : productRepository.findAll()) {
+            if(listing.getSeller().getUsername().equals(username) && listing.getState() == ProductState.AVAILABLE) {
+                listings.add(listing);
+            }
+        }
+        return listings;
+    }
+
+    public List<Product2> getMySubmittedOffers(String username) {
+        ArrayList<Product2> offers = new ArrayList<>();
+        for (Product2 offer : productRepository.findAll()) {
+            if(offer.getBuyer().getUsername().equals(username) && offer.getState() == ProductState.PENDING) {
                 offers.add(offer);
             }
         }

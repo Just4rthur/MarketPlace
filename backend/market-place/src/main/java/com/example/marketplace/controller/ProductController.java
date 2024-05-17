@@ -3,12 +3,16 @@ package com.example.marketplace.controller;
 import com.example.marketplace.dto.ProductDTO;
 import com.example.marketplace.dto.ProductIdDTO;
 import com.example.marketplace.dto.*;
+import com.example.marketplace.lib.TokenLib;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.ProductState;
 import com.example.marketplace.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import com.example.marketplace.service.UserInfoService;
 
@@ -96,7 +100,8 @@ public class ProductController {
     //Ändra product state till pending
     @PutMapping("/submitProductOrder")
     public ResponseEntity<String> submitProductOrder(@RequestBody List<ProductIdDTO> productsToSubmit) {
-        if (productService.changeStatesOfProductsToPending(productsToSubmit)) {
+        String username = TokenLib.getTokenUsername();
+        if (productService.changeStatesOfProductsToPending(productsToSubmit, username)) {
             return ResponseEntity.ok("Order submitted");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
@@ -127,8 +132,20 @@ public class ProductController {
     }
 
     @GetMapping("/getOffers")
-    public List<Product2> getOffers(@RequestBody UsernameDTO usernameDTO) {
-        return productService.getOffers(usernameDTO);
+    public List<Product2> getOffers() {
+        String username = TokenLib.getTokenUsername();
+        return productService.getOffers(username);
     }
 
+    @GetMapping("/getMyListings")
+    public List<Product2> getMyListings() {
+        String username = TokenLib.getTokenUsername();
+        return productService.getMyListings(username);
+    }
+
+    @GetMapping("/getMySubmittedOffers")
+    public List<Product2> getMySubmittedOffers() {
+        String username = TokenLib.getTokenUsername();
+        return productService.getMySubmittedOffers(username);
+    }
 }
