@@ -3,12 +3,12 @@ package com.example.marketplace.controller;
 import java.util.Optional;
 
 import com.example.marketplace.dto.CategoryDTO;
+import com.example.marketplace.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -101,7 +101,7 @@ public class UserController {
     }
 
     @PutMapping("/subscribeToCategory")
-    public ResponseEntity<String> subscribeToCategory(CategoryDTO categoryDTO){
+    public ResponseEntity<String> subscribeToCategory(@RequestBody CategoryDTO categoryDTO){
         //Check token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -126,6 +126,35 @@ public class UserController {
         }
 
         return new ResponseEntity<>("User already subscribed to this category", HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/unsubscribeFromCategory")
+    public ResponseEntity<String> unsubscribeFromCategory(@RequestBody CategoryDTO categoryDTO){
+        //Check token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        String username = "";
+
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            username = userDetails.getUsername();
+        }
+
+        //Get user from the database
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (userInfoService.unsubscribeFromCategory(user, categoryDTO)){
+
+            userRepository.save(user);
+            return new ResponseEntity<String>("User unsubscribed from category successfully", HttpStatus.OK);
+
+        }
+
+        return new ResponseEntity<>("User is not subscribed to this category", HttpStatus.BAD_REQUEST);
+
     }
 
     public void notifyUserOfProduct(User user) {
