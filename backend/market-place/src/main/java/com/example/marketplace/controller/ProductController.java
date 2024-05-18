@@ -77,8 +77,9 @@ public class ProductController {
         }
     }
     // Ta bort en produkt
-    @DeleteMapping("/deleteProduct")
-    public ResponseEntity<String> deleteProduct(@RequestBody ProductNameDTO dto) {
+    @DeleteMapping("/deleteProduct/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable String id) {
+        System.out.println(id);
         //token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -92,7 +93,7 @@ public class ProductController {
             username = userDetails.getUsername();
         }
 
-        if (productService.deleteProduct(dto, username)) {
+        if (productService.deleteProduct(id, username)) {
             return ResponseEntity.ok("Product deleted successfully");
         } else {
             return ResponseEntity.notFound().build();
