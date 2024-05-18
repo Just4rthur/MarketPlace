@@ -125,6 +125,28 @@ public class ProductService {
         return availableProducts;
     }
 
+    public List<Product2> getPurchasedProductsForUser(String username){
+        List<Product2> products = productRepository.findByBuyer(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+        List<Product2> purchasedProducts = new ArrayList<>();
+        for (Product2 product : products) {
+            if (product.getState() == ProductState.PURCHASE_CONFIRMED) {
+                purchasedProducts.add(product);
+            }
+        }
+        return purchasedProducts;
+    }
+
+    public List<Product2> getSoldProductsForUser(String username){
+        List<Product2> products = productRepository.findBySeller(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+        List<Product2> soldProducts = new ArrayList<>();
+        for (Product2 product : products) {
+            if (product.getState() == ProductState.PURCHASE_CONFIRMED) {
+                soldProducts.add(product);
+            }
+        }
+        return soldProducts;
+
+    }
     public boolean changeStateOfProductToAvailable(ProductIdDTO productIdDTO) {
         return false;
     }

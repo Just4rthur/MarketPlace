@@ -19,6 +19,7 @@ public interface ProductRepository extends MongoRepository<Product2, String> {
 
     List<Product2> findByState(ProductState state);
     List<Product2> findBySeller(User user);
+    List<Product2> findByBuyer(User user);
 
 
 }
