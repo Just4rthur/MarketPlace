@@ -35,7 +35,7 @@ public class ProductController {
     public String addProduct(@RequestBody ProductDTO productdto) {
 
         //Convert productdto to product
-        Product2 product = new Product2(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.seller(), null, ProductState.AVAILABLE);
+        Product2 product = new Product2(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.sellerId(), productdto.sellerUsername(), null, null, ProductState.AVAILABLE);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -46,7 +46,8 @@ public class ProductController {
 
             //Get the username from the UserDetails object
             String username = userDetails.getUsername();
-            product.setSeller(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+            product.setSellerId(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")).getId());
+            product.setSellerUsername(username);
         }
 
 
@@ -120,7 +121,7 @@ public class ProductController {
             username = userDetails.getUsername();
         }
 
-        return productService.getAvailableProductsForUser(username);
+        return productService.getAvailableProductsForUser(userRepository.findByUsername(username).orElseThrow().getId());
     }
 
     // Lista produkter inom ett specifikt prisintervall
@@ -159,14 +160,14 @@ public class ProductController {
             //Get the username from the UserDetails object
             String username = userDetails.getUsername();
 
-            if (productService.changeStatesOfProductsToPending(productsToSubmit, username)) {
-
-                return ResponseEntity.ok("Order submitted");
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
+            for (int i = 0; i < productsToSubmit.id().length; i++) {
+                productService.submitProduct(productsToSubmit.id()[i], username);
             }
+
+            return ResponseEntity.ok("Product submitted successfully");
+
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
     }
 
     @PutMapping("/denyProductOffer")

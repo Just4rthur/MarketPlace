@@ -5,22 +5,33 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class Message {
     @Setter
-    @Getter
     private String content;
 
     @Setter
-    @Getter
+    private Product2 product;
+
+    @Setter
     LocalDateTime timestamp;
 
     @Setter
-    @Getter
     private boolean read;
 
-    public Message(String content){
+    public Message(String content, Product2 product){
         this.content = content;
+        this.product = product;
         this.timestamp = LocalDateTime.now();
         this.read = false;
     }
+
+    public void markAsRead() {
+        this.read = true;
+    }
+
+    public void markAsUnread() {
+        this.read = false;
+    }
+
 }

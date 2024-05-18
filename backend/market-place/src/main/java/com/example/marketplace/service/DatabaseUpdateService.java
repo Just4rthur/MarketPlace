@@ -19,13 +19,13 @@ public class DatabaseUpdateService {
         List<Product2> products = mongoTemplate.findAll(Product2.class);
 
         for (Product2 product : products) {
-            if (product.getSeller() != null || product.getBuyer() != null || product.getCategory() != null) {
+            if (product.getSellerId() != null || product.getBuyerId() != null || product.getCategory() != null) {
                 // Skip this iteration if they are
                 continue;
             }
             //Add new fields
-            product.setSeller(null);
-            product.setBuyer(null);
+            product.setSellerId(null);
+            product.setBuyerId(null);
             product.setCategory(Category.ELECTRONIC);
 
             mongoTemplate.save(product);

@@ -1,5 +1,6 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.controller.ProductController;
 import com.example.marketplace.dto.*;
 import com.example.marketplace.model.Product;
 import com.example.marketplace.model.Product2;
@@ -61,8 +62,9 @@ public class ProductService {
     // Tar bort en produkt
     public boolean deleteProduct(String id, String username) {
         Product2 product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Product not found"));
+        String userId = userRepository.findByUsername(username).get().getId();
 
-        if (product.getSeller().getUsername().equals(username)) {
+        if (product.getSellerId().equals(userId)) {
             productRepository.delete(product);
             return true;
         }
@@ -97,36 +99,36 @@ public class ProductService {
         return productRepository.findByCondition(condition);
     }
 
-    public boolean changeStatesOfProductsToPending(ProductIdDTO productIds, String username) {
-        try {
-            for (String id : productIds.id()) {
-                Optional<Product2> productOpt = productRepository.findById(id);
-                Product2 product = productOpt.get();
-                product.setState(ProductState.PENDING);
+    public void submitProduct(String productId, String username) {
+        Product2 product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("Product not found"));
 
-                product.setBuyer(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+        product.setState(ProductState.PENDING);
+        product.setBuyerUsername(username);
+        product.setBuyerId(productId);
 
-                productRepository.save(product);
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        productRepository.save(product);
+
+        System.out.println(product.getBuyerId());
+        System.out.println(product.getBuyerUsername());
+
     }
 
-    public List<Product2> getAvailableProductsForUser(String username) {
-        List<Product2> products = productRepository.findBySeller(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+    public List<Product2> getAvailableProductsForUser(String sellerId) {
+        List<Product2> products = productRepository.findByState(ProductState.AVAILABLE);
         List<Product2> availableProducts = new ArrayList<>();
+
         for (Product2 product : products) {
-            if (product.getState() == ProductState.AVAILABLE) {
+            if (product.getSellerId().equals(sellerId)) {
                 availableProducts.add(product);
+                System.out.println(product.getName());
             }
         }
+
         return availableProducts;
     }
 
-    public List<Product2> getPurchasedProductsForUser(String username){
-        List<Product2> products = productRepository.findByBuyer(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+    public List<Product2> getPurchasedProductsForUser(String buyerId){
+        List<Product2> products = productRepository.findByBuyerId(buyerId);
         List<Product2> purchasedProducts = new ArrayList<>();
         for (Product2 product : products) {
             if (product.getState() == ProductState.PURCHASE_CONFIRMED) {
@@ -137,7 +139,7 @@ public class ProductService {
     }
 
     public List<Product2> getSoldProductsForUser(String username){
-        List<Product2> products = productRepository.findBySeller(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
+        List<Product2> products = productRepository.findBySellerId(username);
         List<Product2> soldProducts = new ArrayList<>();
         for (Product2 product : products) {
             if (product.getState() == ProductState.PURCHASE_CONFIRMED) {

@@ -38,7 +38,7 @@ public class HistoryController {
             username = userDetails.getUsername();
         }
 
-        return productService.getPurchasedProductsForUser(username);
+        return productService.getPurchasedProductsForUser(userRepository.findByUsername(username).orElseThrow().getId());
 
     }
 

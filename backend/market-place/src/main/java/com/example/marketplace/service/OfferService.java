@@ -22,15 +22,20 @@ public class OfferService {
     private ProductService productService;
 
     public List<Product2> getOffers(String username) {
-        List<Product2> userProducts = productRepository.findBySeller(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")));
-        List<Product2> offerProducts = new ArrayList<>();
+        List<Product2> offers = productRepository.findByState(ProductState.PENDING);
+        List<Product2> userOffers = new ArrayList<>();
+        String sellerId = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")).getId();
 
-        for (Product2 product : userProducts) {
-            if (product.getState() == ProductState.PENDING) {
-                offerProducts.add(product);
+        for (Product2 product : offers) {
+            if (product.getSellerId().equals(sellerId)) {
+                userOffers.add(product);
+                System.out.println(product.getName());
             }
         }
-        return offerProducts;
+
+        userOffers.forEach(product -> System.out.println(product.getBuyerId()));
+        return userOffers;
+
     }
 
     public boolean acceptOffer(String id){

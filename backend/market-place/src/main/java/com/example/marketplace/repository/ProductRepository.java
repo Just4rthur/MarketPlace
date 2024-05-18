@@ -18,8 +18,10 @@ public interface ProductRepository extends MongoRepository<Product2, String> {
     List<Product2> findByPriceBetween(double minPrice, double maxPrice);
 
     List<Product2> findByState(ProductState state);
-    List<Product2> findBySeller(User user);
-    List<Product2> findByBuyer(User user);
+    List<Product2> findBySellerId(String sellerId);
+    List<Product2> findByBuyerId(String buyerId);
+    List<Product2> findBySellerUsername(String sellerUsername);
+    List<Product2> findByBuyerUsername(String buyerUsername);
 
 
 }

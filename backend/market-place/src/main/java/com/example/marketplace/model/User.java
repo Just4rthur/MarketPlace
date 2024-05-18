@@ -5,11 +5,14 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Document
 public class User {
 
     @Id
+    @Getter
+    @Setter
     private String id;
     @Getter
     @Setter
@@ -28,7 +31,7 @@ public class User {
     private ArrayList<Category> listOfInterests;
     @Getter
     @Setter
-    private ArrayList<String> notificationList;
+    private List<Message> notificationList;
 
     public User(String username, String email, String password, Role roles) {
         super();
@@ -37,7 +40,7 @@ public class User {
         this.password = password;
         this.roles = roles;
         listOfInterests = new ArrayList<>();
-        notificationList = new ArrayList<>();
+        notificationList = null;
     }
 
 }

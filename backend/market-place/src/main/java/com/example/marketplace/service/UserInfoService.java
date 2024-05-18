@@ -2,21 +2,16 @@ package com.example.marketplace.service;
 
 import com.example.marketplace.dto.CategoryDTO;
 import com.example.marketplace.dto.InterestDTO;
-import com.example.marketplace.dto.ProductDTO;
-import com.example.marketplace.dto.userCredentialDTO;
-import com.example.marketplace.model.Category;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.User;
 import com.example.marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -70,12 +65,6 @@ public class UserInfoService implements UserDetailsService{
 
     public boolean deleteInterest(InterestDTO interestDTO) {
         return false;
-    }
-
-    public ArrayList<String> getNotifications(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        User user = optionalUser.get();
-        return user.getNotificationList();
     }
 
     public void addNotification(Product2 product) {

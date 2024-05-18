@@ -34,6 +34,6 @@ public class InterestController {
 
     @GetMapping("/getNotifications")
     public ArrayList<String> getNotifications(@RequestBody UsernameDTO usernameDTO) {
-        return userInfoService.getNotifications(usernameDTO.username());
+        return null;
     }
 }

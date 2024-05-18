@@ -38,7 +38,7 @@ public class OfferController {
             //Get the username from the UserDetails object
             username = userDetails.getUsername();
         }
-        ResponseEntity.ok("Offers showed for the user");
+        //ResponseEntity.ok("Offers showed for the user");
         return offerService.getOffers(username);
     }
 

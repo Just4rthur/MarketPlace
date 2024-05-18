@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Product2 {
     @JsonProperty("id")
+    @Setter
+    @Getter
     private String id;
 
     @Getter
@@ -42,15 +44,22 @@ public class Product2 {
 
     @Getter
     @Setter
-    private User seller;
+    private String sellerId;
 
     @Getter
     @Setter
-    private User buyer;
+    private String sellerUsername;
+
+    @Getter
+    @Setter
+    private String buyerId;
+
+    @Getter
+    @Setter
+    private String buyerUsername;
 
 
-
-    public Product2(String name, double price, String yearOfProduction, Color color, String condition, Category category, User seller, User buyer, ProductState state) {
+    public Product2(String name, double price, String yearOfProduction, Color color, String condition, Category category, String sellerId, String sellerUsername, String buyerId, String buyerUsername, ProductState state) {
         super();
         this.name = name;
         this.price = price;
@@ -58,7 +67,8 @@ public class Product2 {
         this.color = color;
         this.condition = condition;
         this.category = category;
-        this.seller = seller;
+        this.sellerId = sellerId;
+        this.sellerUsername = sellerUsername;
         this.state = ProductState.AVAILABLE;
     }
 
