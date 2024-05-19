@@ -1,5 +1,6 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.model.Category;
 import com.example.marketplace.model.User;
 import com.example.marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ public class NotificationService {
     @Autowired
     private UserRepository userRepository;
 
-    public void notifyUsers() {
+    public void notifyUsers(Category category) {
+        List<User> users = userRepository.findAll();
     }
 }

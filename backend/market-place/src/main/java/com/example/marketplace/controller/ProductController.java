@@ -6,6 +6,7 @@ import com.example.marketplace.dto.*;
 import com.example.marketplace.model.Product;
 import com.example.marketplace.model.ProductState;
 import com.example.marketplace.repository.UserRepository;
+import com.example.marketplace.service.NotificationService;
 import com.example.marketplace.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,8 @@ public class ProductController {
     private UserInfoService userInfoService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     // Add a new product to the database
     @PostMapping("/addNewProduct")
@@ -39,6 +42,7 @@ public class ProductController {
         //Convert productdto to product
         Product product = new Product(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.sellerId(), productdto.sellerUsername(), null, null, ProductState.AVAILABLE);
 
+        //Token authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 
@@ -48,9 +52,13 @@ public class ProductController {
 
             //Get the username from the UserDetails object
             String username = userDetails.getUsername();
+
+            //Set values
             product.setSellerId(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")).getId());
             product.setSellerUsername(username);
+            product.setCategory(productdto.category());
             product.setState(ProductState.AVAILABLE);
+
         }
 
 

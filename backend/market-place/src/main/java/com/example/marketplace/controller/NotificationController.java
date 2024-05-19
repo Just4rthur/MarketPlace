@@ -20,7 +20,7 @@ public class NotificationController {
 
     @PostMapping("/notifyUsers")
     public ResponseEntity<String> notifyUsers() {
-        notificationService.notifyUsers();
+        notificationService.notifyUsers(null);
 
         return ResponseEntity.ok("Users notified");
     }

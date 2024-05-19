@@ -64,6 +64,8 @@ public class OfferService {
 
         Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Product not found"));
         product.setState(ProductState.AVAILABLE);
+        product.setBuyerId(null);
+        product.setBuyerUsername(null);
         productRepository.save(product);
 
         return true;
