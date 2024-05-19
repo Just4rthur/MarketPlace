@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document
+@Document(collection = "users")
 public class User {
 
     @Id
@@ -28,7 +28,7 @@ public class User {
     private Role roles;
     @Getter
     @Setter
-    private ArrayList<Category> listOfInterests;
+    private List<Category> listOfInterests;
     @Getter
     @Setter
     private List<Message> notificationList;
@@ -40,7 +40,7 @@ public class User {
         this.password = password;
         this.roles = roles;
         listOfInterests = new ArrayList<>();
-        notificationList = null;
+        notificationList = new ArrayList<>();
     }
 
 }

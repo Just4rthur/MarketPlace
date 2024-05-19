@@ -3,7 +3,6 @@ package com.example.marketplace.controller;
 import java.util.Optional;
 
 import com.example.marketplace.dto.CategoryDTO;
-import com.example.marketplace.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

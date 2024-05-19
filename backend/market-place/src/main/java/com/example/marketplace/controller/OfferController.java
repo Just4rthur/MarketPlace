@@ -1,7 +1,6 @@
 package com.example.marketplace.controller;
 
-import com.example.marketplace.dto.ProductIdDTO;
-import com.example.marketplace.model.Product2;
+import com.example.marketplace.model.Product;
 import com.example.marketplace.service.OfferService;
 import com.example.marketplace.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class OfferController {
     private ProductService productService;
 
     @GetMapping("/getOffers")
-    public List<Product2> getOffers() {
+    public List<Product> getOffers() {
 
         String username = "";
 
@@ -38,8 +37,11 @@ public class OfferController {
             //Get the username from the UserDetails object
             username = userDetails.getUsername();
         }
-        //ResponseEntity.ok("Offers showed for the user");
-        return offerService.getOffers(username);
+        System.out.println(username);
+
+        List<Product> productsToBeShown = offerService.getOffers(username);
+        System.out.println(productsToBeShown.toString());
+        return productsToBeShown;
     }
 
     @PutMapping("/acceptOffer/{id}")

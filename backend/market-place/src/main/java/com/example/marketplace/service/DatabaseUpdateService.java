@@ -1,7 +1,7 @@
 package com.example.marketplace.service;
 
 import com.example.marketplace.model.Category;
-import com.example.marketplace.model.Product2;
+import com.example.marketplace.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,9 @@ public class DatabaseUpdateService {
 
     public void updateProducts(){
         //Fetch all products
-        List<Product2> products = mongoTemplate.findAll(Product2.class);
+        List<Product> products = mongoTemplate.findAll(Product.class);
 
-        for (Product2 product : products) {
+        for (Product product : products) {
             if (product.getSellerId() != null || product.getBuyerId() != null || product.getCategory() != null) {
                 // Skip this iteration if they are
                 continue;

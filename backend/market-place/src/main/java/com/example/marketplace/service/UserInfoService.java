@@ -2,7 +2,7 @@ package com.example.marketplace.service;
 
 import com.example.marketplace.dto.CategoryDTO;
 import com.example.marketplace.dto.InterestDTO;
-import com.example.marketplace.model.Product2;
+import com.example.marketplace.model.Product;
 import com.example.marketplace.model.User;
 import com.example.marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class UserInfoService implements UserDetailsService{
         return false;
     }
 
-    public void addNotification(Product2 product) {
+    public void addNotification(Product product) {
 
     }
 }

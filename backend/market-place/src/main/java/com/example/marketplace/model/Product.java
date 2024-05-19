@@ -1,32 +1,76 @@
 package com.example.marketplace.model;
 
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@ToString
+@Document(collection = "products")
 public class Product {
-    @Id
+    @JsonProperty("id")
+    @Setter
+    @Getter
     private String id;
 
     @Getter
     @Setter
     private String name;
-    private String description;
-    private String category;
-    private double price;
-    @Getter
-    private int quantity;
 
-    public Product(String id, String name, String description, String category, double price, int quantity) {
+    @Getter
+    @Setter
+    private double price;
+
+    @Getter
+    @Setter
+    private String yearOfProduction;
+
+    @Getter
+    @Setter
+    private Color color;
+
+    @Getter
+    @Setter
+    private String condition;
+
+    @Getter
+    @Setter
+    private Category category;
+
+    @Getter
+    @Setter
+    private ProductState state;
+
+    @Getter
+    @Setter
+    private String sellerId;
+
+    @Getter
+    @Setter
+    private String sellerUsername;
+
+    @Getter
+    @Setter
+    private String buyerId;
+
+    @Getter
+    @Setter
+    private String buyerUsername;
+
+
+    public Product(String name, double price, String yearOfProduction, Color color, String condition, Category category, String sellerId, String sellerUsername, String buyerId, String buyerUsername, ProductState state) {
         super();
-        this.id = id;
         this.name = name;
-        this.description = description;
-        this.category = category;
         this.price = price;
-        this.quantity = quantity;
+        this.yearOfProduction = yearOfProduction;
+        this.color = color;
+        this.condition = condition;
+        this.category = category;
+        this.sellerId = sellerId;
+        this.sellerUsername = sellerUsername;
+        this.state = ProductState.AVAILABLE;
     }
+
 
 }

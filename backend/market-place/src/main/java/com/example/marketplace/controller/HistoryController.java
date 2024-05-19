@@ -1,6 +1,6 @@
 package com.example.marketplace.controller;
 
-import com.example.marketplace.model.Product2;
+import com.example.marketplace.model.Product;
 import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class HistoryController {
     private ProductService productService;
 
     @GetMapping("/showPurchaseHistory")
-    public List<Product2> showPurchases() {
+    public List<Product> showPurchases() {
 
         String username = "";
 
@@ -43,7 +43,7 @@ public class HistoryController {
     }
 
     @GetMapping("/showSaleHistory")
-    public List<Product2> showSales() {
+    public List<Product> showSales() {
 
         String username = "";
 

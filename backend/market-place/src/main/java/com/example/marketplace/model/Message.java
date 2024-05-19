@@ -11,7 +11,7 @@ public class Message {
     private String content;
 
     @Setter
-    private Product2 product;
+    private Product product;
 
     @Setter
     LocalDateTime timestamp;
@@ -19,7 +19,7 @@ public class Message {
     @Setter
     private boolean read;
 
-    public Message(String content, Product2 product){
+    public Message(String content, Product product){
         this.content = content;
         this.product = product;
         this.timestamp = LocalDateTime.now();
