@@ -58,7 +58,9 @@ public class HistoryController {
             username = userDetails.getUsername();
         }
 
-        return productService.getSoldProductsForUser(username);
+        String userId = userRepository.findByUsername(username).orElseThrow().getId();
+
+        return productService.getSoldProductsForUser(userId);
 
     }
 
