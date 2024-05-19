@@ -168,24 +168,6 @@ public class ProductController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
-
-    @GetMapping("/getOffersByUser")
-    public List<Product> getOffersByUser() {
-        String username = "";
-        //token
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        //Check if the principal is a UserDetails object
-        if (principal instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) principal;
-
-            //Get the username from the UserDetails object
-            username = userDetails.getUsername();
-        }
-        return productService.getOffers(username);
-    }
-
     @PutMapping("/denyProductOffer")
     public ResponseEntity<String> denyProductOffer(@RequestBody ProductIdDTO productIdDTO) {
         if(productService.changeStateOfProductToAvailable(productIdDTO)) {
