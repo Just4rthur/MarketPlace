@@ -1,6 +1,8 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.model.Product;
+import com.example.marketplace.model.ProductState;
+import com.example.marketplace.repository.ProductRepository;
 import com.example.marketplace.service.OfferService;
 import com.example.marketplace.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class OfferController {
     private OfferService offerService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
 
     @GetMapping("/getOffers")
     public List<Product> getOffers() {
@@ -37,10 +41,10 @@ public class OfferController {
             //Get the username from the UserDetails object
             username = userDetails.getUsername();
         }
-        System.out.println(username);
 
         List<Product> productsToBeShown = offerService.getOffers(username);
         System.out.println(productsToBeShown.toString());
+
         return productsToBeShown;
     }
 

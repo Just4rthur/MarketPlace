@@ -69,7 +69,9 @@ public class Product {
         this.category = category;
         this.sellerId = sellerId;
         this.sellerUsername = sellerUsername;
-        this.state = ProductState.AVAILABLE;
+        this.buyerId = buyerId;
+        this.buyerUsername = buyerUsername;
+        this.state = state;
     }
 
 

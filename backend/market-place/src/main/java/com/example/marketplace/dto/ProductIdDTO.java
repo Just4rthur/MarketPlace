@@ -4,6 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public record ProductIdDTO(@JsonProperty String id) {
+public record ProductIdDTO(@JsonProperty String[] id) {
 
 }

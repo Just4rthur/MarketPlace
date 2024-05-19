@@ -19,7 +19,7 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByState(ProductState state);
     List<Product> findBySellerId(String sellerId);
     List<Product> findByBuyerId(String buyerId);
-    List<Product> findAllById(List<String> ids);
+    List<Product> findAllById(String[] ids);
 
     @Query("{ 'sellerId': ?0, 'state': ?1 }")
     List<Product> findBySellerIdAndState(String sellerId, ProductState state);

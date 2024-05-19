@@ -3,10 +3,12 @@ package com.example.marketplace.service;
 import com.example.marketplace.dto.*;
 import com.example.marketplace.model.Product;
 import com.example.marketplace.model.ProductState;
+import com.example.marketplace.model.User;
 import com.example.marketplace.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.marketplace.repository.UserRepository;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
@@ -25,8 +27,6 @@ public class ProductService {
 
     // Lägger till en ny produkt
     public void addProduct(Product product) {
-        String oldName = product.getName();
-        product.setName(oldName.toLowerCase());
         productRepository.save(product);
     }
 
@@ -69,6 +69,7 @@ public class ProductService {
     }
 
     // Hämta alla produkter
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public List<Product> getAllProducts() {
         return productRepository.findByState(ProductState.AVAILABLE);
     }
@@ -93,14 +94,24 @@ public class ProductService {
         return productRepository.findByCondition(condition);
     }
 
-    public Product submitProducts(String id, String username) {
-        Product product = productRepository.findById(id).orElseThrow();
+    public List<Product> submitProducts(String[] id, String username) {
 
+        User user = userRepository.findByUsername(username).orElseThrow();
+        String buyerId = user.getId();
+        String buyerUsername = user.getUsername();
+        List<Product> products = new ArrayList<>();
+
+        for (String productId : id) {
+            Product product = productRepository.findById(productId).orElseThrow();
+            product.setBuyerId(buyerId);
+            product.setBuyerUsername(buyerUsername);
             product.setState(ProductState.PENDING);
-            product.setBuyerId(userRepository.findByUsername(username).get().getId());
-            product.setBuyerUsername(username);
+            products.add(product);
+            productRepository.save(product);
+        }
 
-        return productRepository.save(product);
+        return products;
+
     }
 
     public List<Product> getAvailableProductsForUser(String sellerId) {
@@ -140,11 +151,6 @@ public class ProductService {
 
     }
 
-    public List<Product> getOffers(String username){
-        //TO BE IMPLEMENTED
-        List<Product> offers = productRepository.findAll();
-        return offers;
-    }
     public boolean changeStateOfProductToAvailable(ProductIdDTO productIdDTO) {
         return false;
     }

@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.example.marketplace.service.UserInfoService;
 
@@ -48,6 +50,7 @@ public class ProductController {
             String username = userDetails.getUsername();
             product.setSellerId(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")).getId());
             product.setSellerUsername(username);
+            product.setState(ProductState.AVAILABLE);
         }
 
 
@@ -101,6 +104,7 @@ public class ProductController {
         }
     }
     // Lista alla produkter
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     @GetMapping("/listAll")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
@@ -146,10 +150,9 @@ public class ProductController {
         }
     }
 
-    //Ändra product state till pending
+    //Submit Products
     @PutMapping("/submitProductOrder")
-    public ResponseEntity<Product> submitProductOrder(@RequestBody ProductIdDTO productsToSubmit) {
-        System.out.println(productsToSubmit);
+    public ResponseEntity<List<Product>> submitProductOrder(@RequestBody ProductIdDTO productsToSubmit) {
         //token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -160,9 +163,7 @@ public class ProductController {
 
             //Get the username from the UserDetails object
             String username = userDetails.getUsername();
-            System.out.println("ProductsController.submitProductOrder():  " + username);
-            Product updatedProducts = productService.submitProducts(productsToSubmit.id(), username);
-            System.out.println("ProductsController.submitProductOrder():" +updatedProducts);
+            List<Product> updatedProducts = productService.submitProducts(productsToSubmit.id(), username);
             return ResponseEntity.ok(updatedProducts);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

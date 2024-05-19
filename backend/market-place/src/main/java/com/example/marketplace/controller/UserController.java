@@ -127,6 +127,28 @@ public class UserController {
         return new ResponseEntity<>("User already subscribed to this category", HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/getUser")
+    public ResponseEntity<User> getUser(@RequestBody String userId){
+        //Check token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        String username = "";
+
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            username = userDetails.getUsername();
+        }
+
+        //Get user from the database
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        System.out.println(user.toString());
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @PutMapping("/unsubscribeFromCategory")
     public ResponseEntity<String> unsubscribeFromCategory(@RequestBody CategoryDTO categoryDTO){
         //Check token
