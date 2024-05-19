@@ -2,5 +2,5 @@ package com.example.marketplace.dto;
 
 import java.util.List;
 
-public record ProductIdDTO(String[] id) {
+public record ProductIdDTO(List<String> id) {
 }

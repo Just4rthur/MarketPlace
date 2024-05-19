@@ -1,19 +1,13 @@
 package com.example.marketplace.service;
 
-import com.example.marketplace.controller.ProductController;
 import com.example.marketplace.dto.*;
-import com.example.marketplace.model.Product;
 import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.ProductState;
-import com.example.marketplace.model.User;
 import com.example.marketplace.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.marketplace.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -99,18 +93,17 @@ public class ProductService {
         return productRepository.findByCondition(condition);
     }
 
-    public void submitProduct(String productId, String username) {
-        Product2 product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("Product not found"));
+    @Transactional
+    public List<Product2> submitProducts(List<String> ids, String username) {
+        List<Product2> productsToUpdate = productRepository.findAllById(ids);
 
-        product.setState(ProductState.PENDING);
-        product.setBuyerUsername(username);
-        product.setBuyerId(productId);
+        productsToUpdate.forEach(product -> {
+            product.setState(ProductState.PENDING);
+            product.setBuyerId(userRepository.findByUsername(username).get().getId());
+            product.setBuyerUsername(username);
+        });
 
-        productRepository.save(product);
-
-        System.out.println(product.getBuyerId());
-        System.out.println(product.getBuyerUsername());
-
+        return productRepository.saveAll(productsToUpdate);
     }
 
     public List<Product2> getAvailableProductsForUser(String sellerId) {
@@ -148,6 +141,12 @@ public class ProductService {
         }
         return soldProducts;
 
+    }
+
+    public List<Product2> getOffers(String username){
+        //TO BE IMPLEMENTED
+        List<Product2> offers = productRepository.findAll();
+        return offers;
     }
     public boolean changeStateOfProductToAvailable(ProductIdDTO productIdDTO) {
         return false;

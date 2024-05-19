@@ -7,6 +7,7 @@ import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.ProductState;
 import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.service.ProductService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.web.bind.annotation.*;
 import com.example.marketplace.service.UserInfoService;
 
@@ -148,7 +150,7 @@ public class ProductController {
 
     //Ändra product state till pending
     @PutMapping("/submitProductOrder")
-    public ResponseEntity<String> submitProductOrder(@RequestBody ProductIdDTO productsToSubmit) {
+    public ResponseEntity<List<Product2>> submitProductOrder(@RequestBody ProductIdDTO productsToSubmit) {
         //token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -160,14 +162,28 @@ public class ProductController {
             //Get the username from the UserDetails object
             String username = userDetails.getUsername();
 
-            for (int i = 0; i < productsToSubmit.id().length; i++) {
-                productService.submitProduct(productsToSubmit.id()[i], username);
-            }
+            List<Product2> updatedProducts = productService.submitProducts(productsToSubmit.id(), username);
 
-            return ResponseEntity.ok("Product submitted successfully");
-
+            return ResponseEntity.ok(updatedProducts);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
+    @GetMapping("/getOffersByUser")
+    public List<Product2> getOffersByUser() {
+        String username = "";
+        //token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        //Check if the principal is a UserDetails object
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            //Get the username from the UserDetails object
+            username = userDetails.getUsername();
+        }
+        return productService.getOffers(username);
     }
 
     @PutMapping("/denyProductOffer")

@@ -5,6 +5,7 @@ import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.ProductState;
 import com.example.marketplace.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,12 @@ public interface ProductRepository extends MongoRepository<Product2, String> {
     List<Product2> findByState(ProductState state);
     List<Product2> findBySellerId(String sellerId);
     List<Product2> findByBuyerId(String buyerId);
+    List<Product2> findAllById(List<String> ids);
+
+    @Query("{ 'sellerId': ?0, 'state': ?1 }")
+    List<Product2> findBySellerIdAndState(String sellerId, ProductState state);
+
+    List<Product2> findAllByState(ProductState state);
     List<Product2> findBySellerUsername(String sellerUsername);
     List<Product2> findByBuyerUsername(String buyerUsername);
 

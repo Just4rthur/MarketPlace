@@ -4,6 +4,7 @@ import com.example.marketplace.model.Product2;
 import com.example.marketplace.model.ProductState;
 import com.example.marketplace.repository.ProductRepository;
 import com.example.marketplace.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,19 +23,9 @@ public class OfferService {
     private ProductService productService;
 
     public List<Product2> getOffers(String username) {
-        List<Product2> offers = productRepository.findByState(ProductState.PENDING);
-        List<Product2> userOffers = new ArrayList<>();
-        String sellerId = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found")).getId();
+        List<Product2> products = productRepository.findByState(ProductState.PENDING);
 
-        for (Product2 product : offers) {
-            if (product.getSellerId().equals(sellerId)) {
-                userOffers.add(product);
-                System.out.println(product.getName());
-            }
-        }
-
-        userOffers.forEach(product -> System.out.println(product.getBuyerId()));
-        return userOffers;
+        return products;
 
     }
 
