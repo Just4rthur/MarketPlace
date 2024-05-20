@@ -32,8 +32,6 @@ public class ProductController {
     private UserInfoService userInfoService;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private NotificationService notificationService;
 
     // Add a new product to the database
     @PostMapping("/addNewProduct")
@@ -65,8 +63,6 @@ public class ProductController {
         //Add product to the database
         productService.addProduct(product);
 
-        //Notify users
-        userInfoService.addNotification(product);
         return new ResponseEntity<String>("Product added successfully", HttpStatus.OK).getBody();
     }
 

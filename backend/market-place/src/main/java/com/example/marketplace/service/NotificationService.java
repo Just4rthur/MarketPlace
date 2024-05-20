@@ -1,5 +1,6 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.dto.ProductDTO;
 import com.example.marketplace.model.Category;
 import com.example.marketplace.model.User;
 import com.example.marketplace.repository.UserRepository;
@@ -14,7 +15,7 @@ public class NotificationService {
     @Autowired
     private UserRepository userRepository;
 
-    public void notifyUsers(Category category) {
+    public void notifyUsers(ProductDTO product, String seller) {
         List<User> users = userRepository.findAll();
     }
 }
