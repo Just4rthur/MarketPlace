@@ -40,7 +40,7 @@ public class ProductController {
     public String addProduct(@RequestBody ProductDTO productdto) {
 
         //Convert productdto to product
-        Product product = new Product(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.sellerId(), productdto.sellerUsername(), null, null, ProductState.AVAILABLE, "hej");
+        Product product = new Product(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.sellerId(), productdto.sellerUsername(), null, null, ProductState.AVAILABLE, null);
 
         //Token authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

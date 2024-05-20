@@ -10,6 +10,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -51,6 +52,7 @@ public class OfferService {
 
         Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Product not found"));
         product.setState(ProductState.PURCHASE_CONFIRMED);
+        product.setTimeWhenBought(LocalDateTime.now().toString());
         productRepository.save(product);
 
         return true;
