@@ -40,7 +40,7 @@ public class ProductController {
     public String addProduct(@RequestBody ProductDTO productdto) {
 
         //Convert productdto to product
-        Product product = new Product(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.sellerId(), productdto.sellerUsername(), null, null, ProductState.AVAILABLE);
+        Product product = new Product(productdto.name(), productdto.price(), productdto.yearOfProduction(), productdto.color(), productdto.condition(), productdto.category(), productdto.sellerId(), productdto.sellerUsername(), null, null, ProductState.AVAILABLE, "hej");
 
         //Token authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -187,7 +187,10 @@ public class ProductController {
 
     @PutMapping("/acceptOffer")
     public ResponseEntity<String> acceptOffer(@RequestBody ProductIdDTO productIdDTO) {
+        System.out.println("--- Product accepted: " + productIdDTO.id()[0]);
+
         if(productService.changeStateOfProductToAccept(productIdDTO)) {
+            //productService.testMethod(productIdDTO);
             return ResponseEntity.ok("Offer accepted");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add resource");

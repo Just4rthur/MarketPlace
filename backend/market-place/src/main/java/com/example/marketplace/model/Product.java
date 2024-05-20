@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @ToString
 @Document(collection = "products")
 public class Product {
@@ -58,8 +60,12 @@ public class Product {
     @Setter
     private String buyerUsername;
 
+    @Getter
+    @Setter
+    private String timeWhenBought;
 
-    public Product(String name, double price, String yearOfProduction, Color color, String condition, Category category, String sellerId, String sellerUsername, String buyerId, String buyerUsername, ProductState state) {
+
+    public Product(String name, double price, String yearOfProduction, Color color, String condition, Category category, String sellerId, String sellerUsername, String buyerId, String buyerUsername, ProductState state, String timeWhenBought) {
         super();
         this.name = name;
         this.price = price;
@@ -72,7 +78,6 @@ public class Product {
         this.buyerId = buyerId;
         this.buyerUsername = buyerUsername;
         this.state = state;
+        this.timeWhenBought = timeWhenBought;
     }
-
-
 }

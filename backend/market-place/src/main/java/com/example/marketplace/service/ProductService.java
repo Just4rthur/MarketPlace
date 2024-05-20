@@ -6,11 +6,13 @@ import com.example.marketplace.model.ProductState;
 import com.example.marketplace.model.User;
 import com.example.marketplace.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import com.example.marketplace.repository.UserRepository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import java.util.ArrayList;
@@ -152,10 +154,36 @@ public class ProductService {
     }
 
     public boolean changeStateOfProductToAvailable(ProductIdDTO productIdDTO) {
-        return false;
+        try {
+            String productId = productIdDTO.id()[0];
+            Optional<Product> productOpt = productRepository.findById(productId);
+            Product product = productOpt.get();
+
+            product.setState(ProductState.AVAILABLE);
+            product.setTimeWhenBought(null);
+            productRepository.save(product);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean changeStateOfProductToAccept(ProductIdDTO productIdDTO) {
-        return false;
+            String productId = productIdDTO.id()[0];
+            String timeNow = LocalDateTime.now().toString();
+
+            System.out.println("--- Trying to accept product with id: " + productId);
+
+            Optional<Product> productOpt = productRepository.findById(productId);
+            Product product = productOpt.get();
+
+            product.setState(ProductState.PURCHASE_CONFIRMED);
+            product.setTimeWhenBought(timeNow);
+            productRepository.save(product);
+
+            System.out.println("--- Product was bought: " + product.getTimeWhenBought());
+
+            return true;
     }
 }
