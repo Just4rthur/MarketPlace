@@ -10,19 +10,16 @@ public class Message {
     @Setter
     private String content;
 
-    @Setter
-    private Product product;
 
     @Setter
-    LocalDateTime timestamp;
+    String timestamp;
 
     @Setter
     private boolean read;
 
-    public Message(String content, Product product){
+    public Message(String content){
         this.content = content;
-        this.product = product;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = LocalDateTime.now().toString();
         this.read = false;
     }
 

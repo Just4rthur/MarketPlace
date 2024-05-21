@@ -4,6 +4,7 @@ import com.example.marketplace.model.Category;
 import com.example.marketplace.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,5 +17,6 @@ public interface UserRepository extends MongoRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByListOfInterests(List<Category> categories);
+    @Query("{'listOfInterests': {$in: [?0]}}")
+    Optional<List<User>> findByInterest(Category categories);
 }
