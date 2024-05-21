@@ -87,18 +87,6 @@ public class UserController {
         return ResponseEntity.status(403).body("Invalid username or password");
     }
 
-    public void generateToken(@RequestBody userCredentialDTO userCredentialDTO) {
-        if (userCredentialDTO.username() == null) {
-            throw new UsernameNotFoundException("Invalid User Request");
-        }
-
-        String userToken = jwtService.generateToken(userCredentialDTO.username());
-
-        //Logs the token generated
-        System.out.println(userCredentialDTO.username() + " --> token generated");
-        System.out.println("User token: \n" + userToken);
-    }
-
     @PutMapping("/subscribeToCategory")
     public ResponseEntity<String> subscribeToCategory(@RequestBody CategoryDTO categoryDTO){
         //Check token
@@ -178,12 +166,4 @@ public class UserController {
 
     }
 
-    public void notifyUserOfProduct(User user) {
-        // a user can be interested to receive
-        //messages whenever a MacBook Pro is added to be sold in the marketplace. If the
-        //user is not connected to the system when the product is added, he/she must get
-        //a message on her/his inbox once he/she is connected
-
-
-    }
 }

@@ -112,7 +112,6 @@ public class ProductController {
         }
     }
     // Lista alla produkter
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     @GetMapping("/listAll")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();

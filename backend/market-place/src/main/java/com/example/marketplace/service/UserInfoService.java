@@ -56,6 +56,8 @@ public class UserInfoService implements UserDetailsService{
         if (user.getListOfInterests().contains(categoryDTO.category())) {
             user.getListOfInterests().remove(categoryDTO.category());
             System.out.println("User has unsubscribed from category: " + categoryDTO.category());
+
+            userRepository.save(user);
             return true;
         }
 
